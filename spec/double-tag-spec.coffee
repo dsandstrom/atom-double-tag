@@ -1,10 +1,3 @@
-# sendKey = (key) ->
-#   event = atom.keymaps.constructor.buildKeydownEvent(
-#     key,
-#     {target: document.activeElement}
-#   )
-#   atom.keymaps.handleKeyboardEvent(event)
-
 describe "DoubleTag", ->
   [workspaceElement, editor, editorView] = []
 

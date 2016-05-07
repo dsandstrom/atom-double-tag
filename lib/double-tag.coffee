@@ -30,10 +30,6 @@ class DoubleTag
       console.log @tagText
 
       @startMarker = @editor.markBufferRange(@startTagRange, {})
-      # @editor.decorateMarker(
-      #   @startMarker,
-      #   {type: 'line-number', class: 'double-tag-start'}
-      # )
 
       return unless @findEndTag()
       console.log @endTagRange
