@@ -1,10 +1,11 @@
-{Range, Point} = require 'atom'
+{CompositeDisposable, Range, Point} = require 'atom'
 
 module.exports =
 
 class DoubleTag
   constructor: (@editor) ->
     console.log 'new double tag'
+    @subscriptions = new CompositeDisposable
     @cursor = null
     @frontOfStartTag = null
     @BackOfStartTag = null
@@ -15,6 +16,7 @@ class DoubleTag
     @endMarker = null
 
   destroy: ->
+    @subscriptions?.dispose()
 
   watchForTag: (event) ->
     console.log 'watching for tag'
@@ -38,7 +40,15 @@ class DoubleTag
       @endMarker = @editor.markBufferRange(@endTagRange, {})
       @foundTag = true
 
+    return unless @foundTag
+
+    # TODO: add to main/subscriptions
+    @subscriptions.add @startMarker.onDidChange (event) =>
+      @copyNewTagToEnd()
+      console.log 'copied'
+
   copyNewTagToEnd: ->
+    return if @editor.hasMultipleCursors() or @editorHasSelectedText()
     # console.log @startMarker.getBufferRange()
     newTag = @editor.getTextInBufferRange(@startMarker.getBufferRange())
     console.log 'new tag:', newTag

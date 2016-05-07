@@ -21,12 +21,8 @@ module.exports =
 
       # @doubleTag.watchForTag()
       editorSubscriptions.add editor.onDidChangeCursorPosition (event) ->
-        if doubleTag.foundTag and doubleTag.startMarker
-          doubleTag.startMarker.onDidChange (markerEvent) ->
-            doubleTag.copyNewTagToEnd()
-            console.log 'copied'
-        else
-          doubleTag.watchForTag(event)
+        return if doubleTag.foundTag
+        doubleTag.watchForTag(event)
 
       # TODO: use onDidStopChanging
       # editorSubscriptions.add editor.onDidStopChanging (tagEvent) ->
@@ -39,6 +35,7 @@ module.exports =
 
       editor.onDidDestroy ->
         # TODO: maybe destroy @doubleTag
+        doubleTag.destroy()
         editorSubscriptions?.dispose()
         # cursorSubscriptions?.dispose()
 
