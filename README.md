@@ -6,7 +6,7 @@
 Edit both the start and end HTML tags at the same time.
 
 ### How To Use
-Place your cursor at the end of the start tag and a cursor will be added at the matching end tag.  The second cursor will be removed after you navigate away from the tag.
+Place your cursor at the end of the start tag and after you edit the tag, the matching end tag will be changed.
 
 ### Notes
-In beta.  Issues welcome.
+In development
