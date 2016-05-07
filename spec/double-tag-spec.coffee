@@ -129,102 +129,20 @@ describe "DoubleTag", ->
 
   describe "for an html file with nested div tags", ->
     beforeEach ->
-      editor.setText('<div class="css">\n  <div>test</div>\n</div>')
+      editor.setText('<div>\n  <div>test</div>\n</div>')
 
-    # describe "when cursor is at the back of the outer start tag", ->
-    #   it "adds a cursor to the back of the corresponding end tag", ->
-    #     editor.setCursorBufferPosition([0, 4])
-    #
-    #     cursors = editor.getCursors()
-    #     expect(cursors.length).toBe(2)
-    #
-    #     position = cursors[1]?.getBufferPosition()
-    #     expect(position?.row).toBe(2)
-    #     expect(position?.column).toBe(5)
+    describe "when outer tag is changed", ->
+      it "copies the new tag to the end", ->
+        editor.setCursorBufferPosition([0, 4])
+        editor.backspace() for [1..3]
+        editor.insertText('h3')
 
-    # describe "when cursor is at the back of the inner start tag", ->
-    #   it "adds a cursor to the back of the corresponding end tag", ->
-    #     editor.setCursorBufferPosition([1, 6])
-    #
-    #     cursors = editor.getCursors()
-    #     expect(cursors.length).toBe(2)
-    #
-    #     secondCursor = cursors[1]
-    #     position = secondCursor?.getBufferPosition()
-    #     expect(position?.row).toBe(1)
-    #     expect(position?.column).toBe(16)
+        expect(editor.getText()).toBe '<h3>\n  <div>test</div>\n</h3>'
 
+    describe "when inner tag is changed", ->
+      it "copies the new tag to the end", ->
+        editor.setCursorBufferPosition([1, 6])
+        editor.backspace() for [1..3]
+        editor.insertText('p')
 
-    describe "after a second cursor was added to the outer tag", ->
-      originalCursor = null
-      newCursor      = null
-
-      # beforeEach ->
-      #   editor.setCursorBufferPosition([0, 4])
-      #   [originalCursor, newCursor] = editor.getCursors()
-
-      # it "should work twice", ->
-      #   cursors = editor.getCursors()
-      #
-      #   expect(cursors.length).toBe(2)
-      #
-      #   newCursor.destroy()
-      #
-      #   expect(editor.getCursors().length).toBe(1)
-      #
-      #   originalCursor.moveLeft()
-      #   originalCursor.moveRight()
-      #
-      #   expect(editor.getCursors().length).toBe(2)
-
-      # describe "and the first cursor is at the start of the column", ->
-      #   it "should destroy the second cursor", ->
-      #     originalCursor.moveLeft(4)
-      #
-      #     expect(editor.getCursors().length).toBe(1)
-
-      # describe "and the first cursor was moved past the space", ->
-      #   it "should destroy the second cursor", ->
-      #     originalCursor.moveRight()
-      #
-      #     expect(editor.getCursors().length).toBe(1)
-
-      # describe "and the first cursor was moved down a line", ->
-      #   it "should destroy the second cursor", ->
-      #     originalCursor.moveDown()
-      #
-      #     expect(editor.getCursors().length).toBe(1)
-
-    describe "after a second cursor was added to the inner tag", ->
-      # originalCursor = null
-      # newCursor      = null
-      #
-      # beforeEach ->
-      #   editor.setCursorBufferPosition([1, 6])
-      #   [originalCursor, newCursor] = editor.getCursors()
-
-      # describe "and the first cursor was moved past the tag", ->
-      #   it "should destroy the second cursor", ->
-      #     originalCursor.moveRight()
-      #
-      #     expect(editor.getCursors().length).toBe(1)
-
-      # describe "and the first cursor was moved up a line", ->
-      #   it "should destroy the second cursor", ->
-      #     originalCursor.moveUp()
-      #
-      #     expect(editor.getCursors().length).toBe(1)
-
-      # describe "and a space is entered", ->
-      #   it "should leave the end tag alone", ->
-      #     editor.insertText(' ')
-      #
-      #     expect(editor.getCursors().length).toBe(1)
-      #     expect(editor.lineTextForBufferRow(1)).toBe('  <div  >test</div>')
-
-      # fdescribe "and a tab is entered", ->
-      #   it "should leave the end tag alone", ->
-      #     sendKey('tab')
-      #
-      #     expect(editor.getCursors().length).toBe(1)
-      #     expect(editor.lineTextForBufferRow(1)).toBe('  <div  >test</div>')
+        expect(editor.getText()).toBe '<div>\n  <p>test</p>\n</div>'
