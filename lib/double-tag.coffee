@@ -18,11 +18,16 @@ class DoubleTag
   destroy: ->
     @subscriptions?.dispose()
 
-  watchForTag: (event) ->
+  watchForTag: ->
+    @subscriptions.add @editor.onDidChangeCursorPosition (event) =>
+      return if @foundTag
+      @findTag(event.cursor)
+
+  # private
+
+  findTag: (@cursor) ->
     console.log 'watching for tag'
     return if @editor.hasMultipleCursors() or @editorHasSelectedText()
-
-    @cursor = event.cursor
 
     if @cursorInHtmlTag()
       console.log 'in tag'
@@ -51,8 +56,6 @@ class DoubleTag
     console.log @endMarker.getBufferRange()
     @editor.setTextInBufferRange(@endMarker.getBufferRange(), newTag)
     @foundTag = false
-
-  # private
 
   editorHasSelectedText: ->
     # TODO: add test for "undefined length for null"
@@ -132,5 +135,4 @@ class DoubleTag
       [endTagRange.start.row, endTagRange.start.column + 2],
       [endTagRange.end.row, endTagRange.end.column - 1]
     )
-
     true
