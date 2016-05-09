@@ -46,7 +46,6 @@ class DoubleTag
 
     return unless @foundTag
 
-    # TODO: add to main/subscriptions
     @subscriptions.add @startMarker.onDidChange (event) =>
       console.log 'marker changed'
       @copyNewTagToEnd()
