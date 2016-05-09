@@ -43,6 +43,26 @@ describe "DoubleTag", ->
 
           expect(editor.getText()).toBe '<>test</>'
 
+      describe "and a space is added", ->
+        it "doesn't add a space to the end tag", ->
+          editor.insertText(' ')
+
+          expect(editor.getText()).toBe '<div >test</div>'
+
+      describe "and a class is added", ->
+        it "doesn't add a space to the end tag", ->
+          editor.insertText(' ')
+          editor.insertText('c')
+
+          expect(editor.getText()).toBe '<div c>test</div>'
+
+      describe "and a space is added instead of a tag", ->
+        it "doesn't add a space to the end tag", ->
+          editor.backspace() for [1..3]
+          editor.insertText(' ')
+
+          expect(editor.getText()).toBe '< >test</>'
+
     describe "when cursor is at the front of a start tag", ->
       beforeEach ->
         editor.setCursorBufferPosition([0, 1])
@@ -53,6 +73,8 @@ describe "DoubleTag", ->
 
           expect(editor.getText()).toBe '<sdiv>test</sdiv>'
 
+    # TODO: clear markers when moved out of tag
+
     describe "when two cursors", ->
       it "doesn't operate", ->
         editor.setCursorBufferPosition([0, 4])
@@ -60,13 +82,6 @@ describe "DoubleTag", ->
         editor.insertText('s')
 
         expect(editor.getText()).toBe '<divs>tsest</div>'
-
-      # TODO: clear markers when space added, moved out of tag
-      # describe "and a space is added", ->
-      #   it "doesn't add a space to the end tag", ->
-      #     editor.insertText(' ')
-      #
-      #     expect(editor.getText()).toBe '<div >test</div>'
 
   describe "for an html file with an tag with class", ->
     beforeEach ->

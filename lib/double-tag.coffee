@@ -23,6 +23,14 @@ class DoubleTag
       return if @foundTag
       @findTag(event.cursor)
 
+  reset: ->
+    console.log 'reset'
+    @foundTag = false
+    @startMarker.destroy()
+    @endMarker.destroy()
+    @startMaker = null
+    @endMaker = null
+
   # private
 
   findTag: (@cursor) ->
@@ -45,17 +53,26 @@ class DoubleTag
 
     # TODO: add to main/subscriptions
     @subscriptions.add @startMarker.onDidChange (event) =>
+      console.log 'marker changed'
       @copyNewTagToEnd()
-      console.log 'copied'
 
   copyNewTagToEnd: ->
     return if @editor.hasMultipleCursors() or @editorHasSelectedText()
     # console.log @startMarker.getBufferRange()
     newTag = @editor.getTextInBufferRange(@startMarker.getBufferRange())
-    console.log 'new tag:', newTag
-    console.log @endMarker.getBufferRange()
+    # remove space after new tag, but allow blank new tag
+    origTagLength = newTag.length
+    if origTagLength
+      matches = newTag.match(/^\w+/)
+      return @reset() unless matches
+      newTag = matches[0]
+    newTagLength = newTag.length
+    console.log 'newTag:', "`#{newTag}`"
     @editor.setTextInBufferRange(@endMarker.getBufferRange(), newTag)
-    @foundTag = false
+    console.log 'copied'
+    # reset if a space was added
+    @reset() unless origTagLength != null && newTagLength != null &&
+                    origTagLength == newTagLength
 
   editorHasSelectedText: ->
     # TODO: add test for "undefined length for null"
