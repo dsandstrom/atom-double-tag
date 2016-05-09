@@ -6,7 +6,7 @@
 Edit both the start and end HTML tags at the same time.
 
 ### How To Use
-Place your cursor at the end of the start tag and after you edit the tag, the matching end tag will be changed.
+Edit the start tag (`<div>`) and the matching end tag (`</div>`) will be changed automatically.
 
 ### Notes
 In development
