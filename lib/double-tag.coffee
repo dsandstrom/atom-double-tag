@@ -97,7 +97,6 @@ class DoubleTag
   cursorIsInStartTag: ->
     cursorPosition = @cursor.getBufferPosition()
     return unless @startTagRange.containsPoint(cursorPosition)
-    return unless cursorPosition.isEqual(@backOfStartTag)
     true
 
   findStartTag: ->

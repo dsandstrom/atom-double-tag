@@ -3,7 +3,6 @@ describe "DoubleTag", ->
 
   beforeEach ->
     workspaceElement = atom.views.getView(atom.workspace)
-
     jasmine.attachToDOM(workspaceElement)
 
     waitsForPromise ->
@@ -43,6 +42,16 @@ describe "DoubleTag", ->
           editor.backspace() for [1..3]
 
           expect(editor.getText()).toBe '<>test</>'
+
+    describe "when cursor is at the front of a start tag", ->
+      beforeEach ->
+        editor.setCursorBufferPosition([0, 1])
+
+      describe "and a letter is added", ->
+        it "copies the letter to the end tag", ->
+          editor.insertText('s')
+
+          expect(editor.getText()).toBe '<sdiv>test</sdiv>'
 
     describe "when two cursors", ->
       it "doesn't operate", ->
