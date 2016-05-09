@@ -129,12 +129,30 @@ describe "DoubleTag", ->
       editor.setText('<div>\n  <span>test</span>\n</div>')
 
     describe "when outer tag is changed", ->
-      it "copies the new tag to the end", ->
+      beforeEach ->
         editor.setCursorBufferPosition([0, 4])
         editor.backspace() for [1..3]
         editor.insertText('h3')
 
+      it "copies the new tag to the end", ->
         expect(editor.getText()).toBe '<h3>\n  <span>test</span>\n</h3>'
+
+      describe "then inner tag is changed after moving cursor with arrows", ->
+        it "copies the new tag to the end", ->
+          editor.moveDown()
+          editor.moveRight(4)
+          editor.backspace() for [1..4]
+          editor.insertText('b')
+
+          expect(editor.getText()).toBe '<h3>\n  <b>test</b>\n</h3>'
+
+      describe "then inner tag is changed after moving cusor with mouse", ->
+        it "copies the new tag to the end", ->
+          editor.setCursorBufferPosition([1, 7])
+          editor.backspace() for [1..4]
+          editor.insertText('b')
+
+          expect(editor.getText()).toBe '<h3>\n  <b>test</b>\n</h3>'
 
     describe "when inner tag is changed", ->
       it "copies the new tag to the end", ->

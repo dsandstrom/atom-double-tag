@@ -6,21 +6,16 @@ class DoubleTag
   constructor: (@editor) ->
     console.log 'new double tag'
     @subscriptions = new CompositeDisposable
-    @cursor = null
-    @frontOfStartTag = null
-    @BackOfStartTag = null
-    @startTagRange = null
-    @tagText =  null
     @foundTag = false
-    @startMarker = null
-    @endMarker = null
 
   destroy: ->
     @subscriptions?.dispose()
 
   watchForTag: ->
     @subscriptions.add @editor.onDidChangeCursorPosition (event) =>
+      @reset() if @foundTag and @cursorLeftMarker()
       return if @foundTag
+
       @findTag(event.cursor)
 
   reset: ->
@@ -152,3 +147,7 @@ class DoubleTag
       [endTagRange.end.row, endTagRange.end.column - 1]
     )
     true
+
+  cursorLeftMarker: ->
+    cursorPosition = @cursor.getBufferPosition()
+    !@startMarker.getBufferRange().containsPoint(cursorPosition)
