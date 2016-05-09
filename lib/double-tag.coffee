@@ -1,10 +1,13 @@
+# FIXME: not activating when backspace to end of tag
+# TODO: disable on self closing tags
+
 {CompositeDisposable, Range, Point} = require 'atom'
 
 module.exports =
 
 class DoubleTag
   constructor: (@editor) ->
-    console.log 'new double tag'
+    # console.log 'new double tag'
     @subscriptions = new CompositeDisposable
     @foundTag = false
 
@@ -13,6 +16,7 @@ class DoubleTag
 
   watchForTag: ->
     @subscriptions.add @editor.onDidChangeCursorPosition (event) =>
+      console.log 'cursor position changed'
       @reset() if @foundTag and @cursorLeftMarker()
       return if @foundTag
 
@@ -35,12 +39,12 @@ class DoubleTag
     if @cursorInHtmlTag()
       console.log 'in tag'
       return unless @findStartTag()
-      console.log @tagText
+      # console.log @tagText
 
       @startMarker = @editor.markBufferRange(@startTagRange, {})
 
       return unless @findEndTag()
-      console.log @endTagRange
+      # console.log @endTagRange
       @endMarker = @editor.markBufferRange(@endTagRange, {})
       @foundTag = true
 
@@ -63,7 +67,7 @@ class DoubleTag
     newTagLength = newTag.length
     console.log 'newTag:', "`#{newTag}`"
     @editor.setTextInBufferRange(@endMarker.getBufferRange(), newTag)
-    console.log 'copied'
+    # console.log 'copied'
     # reset if a space was added
     @reset() unless origTagLength != null && newTagLength != null &&
                     origTagLength == newTagLength
@@ -130,7 +134,7 @@ class DoubleTag
     endTagRange = null
     nestedTagCount = 0
     scanRange = new Range(@backOfStartTag, @editor.buffer.getEndPosition())
-    console.log tagRegex
+    # console.log tagRegex
     @editor.buffer.scanInRange tagRegex, scanRange, (obj) ->
       if obj.matchText.match(startTagRegex)
         nestedTagCount++

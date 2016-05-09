@@ -73,8 +73,6 @@ describe "DoubleTag", ->
 
           expect(editor.getText()).toBe '<sdiv>test</sdiv>'
 
-    # TODO: clear markers when moved out of tag
-
     describe "when two cursors", ->
       it "doesn't operate", ->
         editor.setCursorBufferPosition([0, 4])
