@@ -73,6 +73,17 @@ describe "DoubleTag", ->
 
           expect(editor.getText()).toBe '<sdiv>test</sdiv>'
 
+    describe "when div is an ignored tag", ->
+      beforeEach ->
+        atom.config.set('double-tag.ignoredTags', ['div'])
+        editor.setCursorBufferPosition([0, 4])
+
+      describe "and a letter is added", ->
+        it "doesn't copy the letter to the end tag", ->
+          editor.insertText('s')
+
+          expect(editor.getText()).toBe '<divs>test</div>'
+
     describe "when two cursors", ->
       it "doesn't operate", ->
         editor.setCursorBufferPosition([0, 4])

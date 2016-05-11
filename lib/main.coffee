@@ -4,8 +4,16 @@ DoubleTag = require './double-tag'
 module.exports =
   subscriptions: null
   config:
+    ignoredTags:
+      description: 'These HTML tags will be skipped'
+      type: 'array'
+      default: [
+        'area', 'base', 'body', 'br', 'col', 'command', 'embed', 'head', 'hr',
+        'html', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source',
+        'title', 'track', 'wbr'
+      ]
     debug:
-      title: 'Enable console log debug messages'
+      title: 'Enable debug messages in the console'
       type: 'boolean'
       default: false
 

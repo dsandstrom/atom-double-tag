@@ -30,8 +30,6 @@ class DoubleTag
     @startMaker = null
     @endMaker = null
 
-  debugEnabled: -> atom.config.get('double-tag.debug')
-
   # private
 
   findTag: (@cursor) ->
@@ -42,6 +40,7 @@ class DoubleTag
       console.log 'in tag' if @debugEnabled()
       return unless @findStartTag()
       # console.log @tagText if @debugEnabled()
+      return if @tagShouldBeIgnored()
 
       @startMarker = @editor.markBufferRange(@startTagRange, {})
 
@@ -156,3 +155,8 @@ class DoubleTag
   cursorLeftMarker: ->
     cursorPosition = @cursor.getBufferPosition()
     !@startMarker.getBufferRange().containsPoint(cursorPosition)
+
+  debugEnabled: -> atom.config.get('double-tag.debug')
+
+  tagShouldBeIgnored: ->
+    atom.config.get('double-tag.ignoredTags')?.indexOf(@tagText) >= 0
