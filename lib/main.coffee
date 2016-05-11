@@ -24,7 +24,6 @@ module.exports =
       editorScope = editor.getRootScopeDescriptor?().getScopesArray()
       return unless editorScope and editorScope.length
 
-      # TODO: add option for other scopes
       # TODO: make sure language is loaded
       return unless editorScope[0].match(/text\.html/)
 

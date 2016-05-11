@@ -1,5 +1,4 @@
 # FIXME: not activating when backspace to end of tag
-# TODO: disable on self closing tags
 
 {CompositeDisposable, Range, Point} = require 'atom'
 
