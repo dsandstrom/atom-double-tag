@@ -112,15 +112,6 @@ describe "DoubleTag", ->
 
           expect(editor.getText()).toBe '< class="css">test</>'
 
-    # describe "when ignoredTags config is set to 'div'", ->
-    #   it "doens't add a cursor to the back of the end tag", ->
-    #     atom.config.set('double-tag:ignoredTags', 'div')
-    #
-    #     editor.setCursorBufferPosition([0, 4])
-    #
-    #     cursors = editor.getCursors()
-    #     expect(cursors.length).toBe(1)
-
   describe "for an html file with an multiple line div tag", ->
     beforeEach ->
       editor.setText('<div>\n  test\n</div>')
