@@ -3,6 +3,11 @@ DoubleTag = require './double-tag'
 
 module.exports =
   subscriptions: null
+  config:
+    debug:
+      title: 'Enable console log debug messages'
+      type: 'boolean'
+      default: false
 
   activate: (state) ->
     @subscriptions = new CompositeDisposable

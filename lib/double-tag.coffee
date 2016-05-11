@@ -7,7 +7,7 @@ module.exports =
 
 class DoubleTag
   constructor: (@editor) ->
-    # console.log 'new double tag'
+    # console.log 'new double tag' if @debugEnabled()
     @subscriptions = new CompositeDisposable
     @foundTag = false
 
@@ -16,47 +16,49 @@ class DoubleTag
 
   watchForTag: ->
     @subscriptions.add @editor.onDidChangeCursorPosition (event) =>
-      console.log 'cursor position changed'
+      console.log 'cursor position changed' if @debugEnabled()
       @reset() if @foundTag and @cursorLeftMarker()
       return if @foundTag
 
       @findTag(event.cursor)
 
   reset: ->
-    console.log 'reset'
+    console.log 'reset' if @debugEnabled()
     @foundTag = false
     @startMarker.destroy()
     @endMarker.destroy()
     @startMaker = null
     @endMaker = null
 
+  debugEnabled: -> atom.config.get('double-tag.debug')
+
   # private
 
   findTag: (@cursor) ->
-    console.log 'watching for tag'
+    console.log 'watching for tag' if @debugEnabled()
     return if @editor.hasMultipleCursors() or @editorHasSelectedText()
 
     if @cursorInHtmlTag()
-      console.log 'in tag'
+      console.log 'in tag' if @debugEnabled()
       return unless @findStartTag()
-      # console.log @tagText
+      # console.log @tagText if @debugEnabled()
 
       @startMarker = @editor.markBufferRange(@startTagRange, {})
 
       return unless @findEndTag()
-      # console.log @endTagRange
+      # console.log @endTagRange if @debugEnabled()
       @endMarker = @editor.markBufferRange(@endTagRange, {})
       @foundTag = true
 
     return unless @foundTag
 
     @subscriptions.add @startMarker.onDidChange (event) =>
-      console.log 'marker changed'
+      console.log 'marker changed' if @debugEnabled()
       @copyNewTagToEnd()
 
   copyNewTagToEnd: ->
     return if @editor.hasMultipleCursors() or @editorHasSelectedText()
-    # console.log @startMarker.getBufferRange()
+    # console.log @startMarker.getBufferRange() if @debugEnabled()
     newTag = @editor.getTextInBufferRange(@startMarker.getBufferRange())
     # remove space after new tag, but allow blank new tag
     origTagLength = newTag.length
@@ -65,9 +67,9 @@ class DoubleTag
       return @reset() unless matches
       newTag = matches[0]
     newTagLength = newTag.length
-    console.log 'newTag:', "`#{newTag}`"
+    console.log 'newTag:', "`#{newTag}`" if @debugEnabled()
     @editor.setTextInBufferRange(@endMarker.getBufferRange(), newTag)
-    # console.log 'copied'
+    # console.log 'copied' if @debugEnabled()
     # reset if a space was added
     @reset() unless origTagLength != null && newTagLength != null &&
                     origTagLength == newTagLength
@@ -134,7 +136,7 @@ class DoubleTag
     endTagRange = null
     nestedTagCount = 0
     scanRange = new Range(@backOfStartTag, @editor.buffer.getEndPosition())
-    # console.log tagRegex
+    # console.log tagRegex if @debugEnabled()
     @editor.buffer.scanInRange tagRegex, scanRange, (obj) ->
       if obj.matchText.match(startTagRegex)
         nestedTagCount++
@@ -143,7 +145,7 @@ class DoubleTag
       if nestedTagCount < 0
         endTagRange = obj.range
         obj.stop()
-    console.log 'found end'
+    console.log 'found end' if @debugEnabled()
     return unless endTagRange
     @endTagRange = new Range(
       [endTagRange.start.row, endTagRange.start.column + 2],
