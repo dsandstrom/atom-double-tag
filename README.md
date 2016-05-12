@@ -19,4 +19,5 @@ Edit the start tag (`<div>`) and the matching end tag (`</div>`) will be changed
 ```
 
 ### Notes
-In beta.  Issues and Pull Requests are welcome.
+* In beta.  Issues and Pull Requests are welcome.
+* Recording done with: [screen-recorder](https://atom.io/packages/screen-recorder)
