@@ -72,19 +72,6 @@ class DoubleTag
     @reset() unless origTagLength != null and newTagLength != null and
                     origTagLength == newTagLength
 
-  editorHasSelectedText: ->
-    # TODO: add test for "undefined length for null"
-    @editor.getSelectedText()?.length > 0
-
-  cursorInHtmlTag: ->
-    scopeDescriptor = @cursor?.getScopeDescriptor()
-    return unless scopeDescriptor
-
-    scopes = scopeDescriptor.getScopesArray()
-    return unless scopes
-
-    scopes[1]?.match(/(meta\.tag|incomplete\.html)/)
-
   setFrontOfStartTag: ->
     frontRegex = /<(a-z)?/i
     frontOfStartTag = @cursor.getBeginningOfCurrentWordBufferPosition(
@@ -108,11 +95,6 @@ class DoubleTag
       backOfStartTag = obj.range.start
       obj.stop()
     @backOfStartTag = backOfStartTag
-
-  cursorIsInStartTag: ->
-    cursorPosition = @cursor.getBufferPosition()
-    return unless @startTagRange.containsPoint(cursorPosition)
-    true
 
   findStartTag: ->
     # TODO: don't allow #, in tag
@@ -149,6 +131,27 @@ class DoubleTag
       [endTagRange.start.row, endTagRange.start.column + 2],
       [endTagRange.end.row, endTagRange.end.column - 1]
     )
+    true
+
+  editorHasSelectedText: ->
+    # TODO: add test for "undefined length for null"
+    console.log 'here'
+    bool = @editor.getSelectedText() || @editor.getSelectedText()?.length > 0
+    console.log @editor.getSelectedBufferRange()
+    bool
+
+  cursorInHtmlTag: ->
+    scopeDescriptor = @cursor?.getScopeDescriptor()
+    return unless scopeDescriptor
+
+    scopes = scopeDescriptor.getScopesArray()
+    return unless scopes
+
+    scopes[1]?.match(/(meta\.tag|incomplete\.html)/)
+
+  cursorIsInStartTag: ->
+    cursorPosition = @cursor.getBufferPosition()
+    return unless @startTagRange.containsPoint(cursorPosition)
     true
 
   cursorLeftMarker: ->
