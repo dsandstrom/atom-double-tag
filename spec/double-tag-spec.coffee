@@ -4,6 +4,7 @@ describe "DoubleTag", ->
   beforeEach ->
     workspaceElement = atom.views.getView(atom.workspace)
     jasmine.attachToDOM(workspaceElement)
+    atom.config.set('double-tag.debug', false)
 
     waitsForPromise ->
       atom.workspace.open('example.html').then (e) ->
@@ -111,6 +112,22 @@ describe "DoubleTag", ->
           editor.backspace() for [1..3]
 
           expect(editor.getText()).toBe '< class="css">test</>'
+
+  # failing test for #1
+  # describe "for an html file with an tag with class", ->
+  #   beforeEach ->
+  #     editor.setText('<div  class="css">test</div>')
+  #
+  #   describe "when cursor is a space away from the tag", ->
+  #     beforeEach ->
+  #       editor.setCursorBufferPosition([0, 5])
+  #
+  #     describe "and backspaced to the tag", ->
+  #       it "copies the tag text to the end tag", ->
+  #         editor.backspace()
+  #         # editor.insertText('v')
+  #
+  #         expect(editor.getText()).toBe '<divv class="css">test</divv>'
 
   describe "for an html file with an multiple line div tag", ->
     beforeEach ->

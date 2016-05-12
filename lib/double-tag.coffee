@@ -1,4 +1,6 @@
 # FIXME: not activating when backspace to end of tag
+# backspace selects to the left then deletes
+# I'm returning when there is a selection
 
 {CompositeDisposable, Range, Point} = require 'atom'
 
