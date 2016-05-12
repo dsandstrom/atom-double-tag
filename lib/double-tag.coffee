@@ -8,7 +8,6 @@ module.exports =
 
 class DoubleTag
   constructor: (@editor) ->
-    # console.log 'new double tag' if @debugEnabled()
     @subscriptions = new CompositeDisposable
     @foundTag = false
 
@@ -17,14 +16,12 @@ class DoubleTag
 
   watchForTag: ->
     @subscriptions.add @editor.onDidChangeCursorPosition (event) =>
-      console.log 'cursor position changed' if @debugEnabled()
       @reset() if @foundTag and @cursorLeftMarker()
       return if @foundTag
 
       @findTag(event.cursor)
 
   reset: ->
-    console.log 'reset' if @debugEnabled()
     @foundTag = false
     @startMarker.destroy()
     @endMarker.destroy()
@@ -34,31 +31,25 @@ class DoubleTag
   # private
 
   findTag: (@cursor) ->
-    console.log 'watching for tag' if @debugEnabled()
     return if @editor.hasMultipleCursors() or @editorHasSelectedText()
     return unless @cursorInHtmlTag()
 
-    console.log 'in tag' if @debugEnabled()
     return unless @findStartTag()
-    # console.log @tagText if @debugEnabled()
     return if @tagShouldBeIgnored()
 
     @startMarker = @editor.markBufferRange(@startTagRange, {})
 
     return unless @findEndTag()
-    # console.log @endTagRange if @debugEnabled()
     @endMarker = @editor.markBufferRange(@endTagRange, {})
     @foundTag = true
 
     return unless @foundTag
 
     @subscriptions.add @startMarker.onDidChange (event) =>
-      console.log 'marker changed' if @debugEnabled()
       @copyNewTagToEnd()
 
   copyNewTagToEnd: ->
     return if @editor.hasMultipleCursors() or @editorHasSelectedText()
-    # console.log @startMarker.getBufferRange() if @debugEnabled()
     newTag = @editor.getTextInBufferRange(@startMarker.getBufferRange())
     # remove space after new tag, but allow blank new tag
     origTagLength = newTag.length
@@ -67,9 +58,7 @@ class DoubleTag
       return @reset() unless matches
       newTag = matches[0]
     newTagLength = newTag.length
-    console.log 'newTag:', "`#{newTag}`" if @debugEnabled()
     @editor.setTextInBufferRange(@endMarker.getBufferRange(), newTag)
-    # console.log 'copied' if @debugEnabled()
     # reset if a space was added
     @reset() unless origTagLength != null and newTagLength != null and
                     origTagLength == newTagLength
@@ -117,7 +106,6 @@ class DoubleTag
     endTagRange = null
     nestedTagCount = 0
     scanRange = new Range(@backOfStartTag, @editor.buffer.getEndPosition())
-    # console.log tagRegex if @debugEnabled()
     @editor.buffer.scanInRange tagRegex, scanRange, (obj) ->
       if obj.matchText.match(/^<\w/)
         nestedTagCount++
@@ -127,7 +115,6 @@ class DoubleTag
         endTagRange = obj.range
         obj.stop()
     return unless endTagRange
-    console.log 'found end' if @debugEnabled()
     # don't include <\, >
     @endTagRange = new Range(
       [endTagRange.start.row, endTagRange.start.column + 2],
@@ -156,8 +143,6 @@ class DoubleTag
   cursorLeftMarker: ->
     cursorPosition = @cursor.getBufferPosition()
     !@startMarker.getBufferRange().containsPoint(cursorPosition)
-
-  debugEnabled: -> atom.config.get('double-tag.debug')
 
   tagShouldBeIgnored: ->
     atom.config.get('double-tag.ignoredTags')?.indexOf(@tagText) >= 0

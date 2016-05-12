@@ -12,10 +12,6 @@ module.exports =
         'html', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source',
         'title', 'track', 'wbr'
       ]
-    debug:
-      title: 'Enable debug messages in the console'
-      type: 'boolean'
-      default: false
 
   activate: (state) ->
     @subscriptions = new CompositeDisposable
