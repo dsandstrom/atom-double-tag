@@ -1,3 +1,3 @@
-## 0.1.0 - First Release
-* Every feature added
-* Every bug fixed
+## 0.1.0
+_May 12, 2016_
+- First Release
