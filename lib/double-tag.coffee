@@ -34,19 +34,19 @@ class DoubleTag
   findTag: (@cursor) ->
     console.log 'watching for tag' if @debugEnabled()
     return if @editor.hasMultipleCursors() or @editorHasSelectedText()
+    return unless @cursorInHtmlTag()
 
-    if @cursorInHtmlTag()
-      console.log 'in tag' if @debugEnabled()
-      return unless @findStartTag()
-      # console.log @tagText if @debugEnabled()
-      return if @tagShouldBeIgnored()
+    console.log 'in tag' if @debugEnabled()
+    return unless @findStartTag()
+    # console.log @tagText if @debugEnabled()
+    return if @tagShouldBeIgnored()
 
-      @startMarker = @editor.markBufferRange(@startTagRange, {})
+    @startMarker = @editor.markBufferRange(@startTagRange, {})
 
-      return unless @findEndTag()
-      # console.log @endTagRange if @debugEnabled()
-      @endMarker = @editor.markBufferRange(@endTagRange, {})
-      @foundTag = true
+    return unless @findEndTag()
+    # console.log @endTagRange if @debugEnabled()
+    @endMarker = @editor.markBufferRange(@endTagRange, {})
+    @foundTag = true
 
     return unless @foundTag
 
@@ -69,7 +69,7 @@ class DoubleTag
     @editor.setTextInBufferRange(@endMarker.getBufferRange(), newTag)
     # console.log 'copied' if @debugEnabled()
     # reset if a space was added
-    @reset() unless origTagLength != null && newTagLength != null &&
+    @reset() unless origTagLength != null and newTagLength != null and
                     origTagLength == newTagLength
 
   editorHasSelectedText: ->
