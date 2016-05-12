@@ -137,10 +137,7 @@ class DoubleTag
 
   editorHasSelectedText: ->
     # TODO: add test for "undefined length for null"
-    console.log 'here'
-    bool = @editor.getSelectedText() || @editor.getSelectedText()?.length > 0
-    console.log @editor.getSelectedBufferRange()
-    bool
+    @editor.getSelectedText()?.length > 0
 
   cursorInHtmlTag: ->
     scopeDescriptor = @cursor?.getScopeDescriptor()
