@@ -129,22 +129,22 @@ class DoubleTag
     true
 
   findEndTag: ->
-    startTagRegex = new RegExp("<#{@tagText}[>\\s]", 'i')
     tagRegex = new RegExp("<\\/?#{@tagText}[>\\s]", 'gi')
     endTagRange = null
     nestedTagCount = 0
     scanRange = new Range(@backOfStartTag, @editor.buffer.getEndPosition())
     # console.log tagRegex if @debugEnabled()
     @editor.buffer.scanInRange tagRegex, scanRange, (obj) ->
-      if obj.matchText.match(startTagRegex)
+      if obj.matchText.match(/^<\w/)
         nestedTagCount++
       else
         nestedTagCount--
       if nestedTagCount < 0
         endTagRange = obj.range
         obj.stop()
-    console.log 'found end' if @debugEnabled()
     return unless endTagRange
+    console.log 'found end' if @debugEnabled()
+    # don't include <\, >
     @endTagRange = new Range(
       [endTagRange.start.row, endTagRange.start.column + 2],
       [endTagRange.end.row, endTagRange.end.column - 1]
