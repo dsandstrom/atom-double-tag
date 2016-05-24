@@ -4,8 +4,7 @@
   "version": "0.1.0",
   "description": "Faster HTML tag editing",
   "keywords": [
-    "html",
-    "erb"
+    "html"
   ],
   "activationCommands": {},
   "repository": "https://github.com/dsandstrom/atom-double-tag",
