@@ -54,7 +54,7 @@ class DoubleTag
     # remove space after new tag, but allow blank new tag
     origTagLength = newTag.length
     if origTagLength
-      matches = newTag.match(/^\w+/)
+      matches = newTag.match(/^[\w-]+/)
       return @reset() unless matches
       newTag = matches[0]
     newTagLength = newTag.length

@@ -200,3 +200,15 @@ describe "DoubleTag", ->
           editor.insertText('p')
 
           expect(editor.getText()).toBe '<div>\n  <p>test</p>\n</div>'
+
+    describe "with dashed tag", ->
+      beforeEach ->
+        editor.setText('<dashed-div>test</dashed-div>')
+
+      describe "when tag is changed", ->
+        it "copies the new tag to the end", ->
+          editor.setCursorBufferPosition([0, 11])
+          editor.backspace() for [1..4]
+          editor.insertText('-span')
+
+          expect(editor.getText()).toBe '<dashed-span>test</dashed-span>'
