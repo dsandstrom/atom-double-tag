@@ -14,6 +14,8 @@ Edit the start tag (`<div>`) and the matching end tag (`</div>`) will be changed
 * **ignoredTags** - HTML tags that are ignored.  (Default:
 `area, base, body, br, col, command, embed, head, hr, html, img, input, keygen, link, meta, param, source, title, track, wbr`)
 
+
 ### Notes
+* Supported Languages: HTML, PHP, ERB, JSX
 * In beta.  Issues and Pull Requests are welcome.
 * Recording done with: [screen-recorder](https://atom.io/packages/screen-recorder)

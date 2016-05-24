@@ -131,9 +131,9 @@ class DoubleTag
     return unless scopeDescriptor
 
     scopes = scopeDescriptor.getScopesArray()
-    return unless scopes
+    return unless scopes and scopes.length
 
-    scopes[1]?.match(/(meta\.tag|incomplete\.html)/)
+    scopes.some (scope) -> /meta\.tag/.test(scope)
 
   cursorIsInStartTag: ->
     cursorPosition = @cursor.getBufferPosition()
