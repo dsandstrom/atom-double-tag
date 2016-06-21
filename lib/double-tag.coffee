@@ -2,7 +2,7 @@
 # backspace selects to the left then deletes
 # I'm returning when there is a selection
 
-{Emitter, CompositeDisposable, Range, Point} = require 'atom'
+{CompositeDisposable, Range, Point} = require 'atom'
 
 module.exports =
 
