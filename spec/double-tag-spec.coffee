@@ -212,3 +212,17 @@ describe "DoubleTag", ->
           editor.insertText('-span')
 
           expect(editor.getText()).toBe '<dashed-span>test</dashed-span>'
+
+    describe "undo-test", ->
+      beforeEach ->
+        editor.setText('<div>test</div>')
+
+      describe "when undo", ->
+        it "should undo in block", ->
+          editor.setCursorBufferPosition([0, 4])
+          editor.insertText('-span')
+          editor.undo()
+          # not sure why need to undo here, but in editor, one "ctrl+z" is good enough
+          editor.undo()
+
+          expect(editor.getText()).toBe '<div>test</div>'
