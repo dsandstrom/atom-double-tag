@@ -2,7 +2,7 @@
 # backspace selects to the left then deletes
 # I'm returning when there is a selection
 
-{CompositeDisposable, Range, Point} = require 'atom'
+{Emitter, CompositeDisposable, Range, Point} = require 'atom'
 
 module.exports =
 
@@ -18,7 +18,6 @@ class DoubleTag
     @subscriptions.add @editor.onDidChangeCursorPosition (event) =>
       @reset() if @foundTag and @cursorLeftMarker()
       return if @foundTag
-
       @findTag(event.cursor)
 
   reset: ->
@@ -36,7 +35,6 @@ class DoubleTag
 
     return unless @findStartTag()
     return if @tagShouldBeIgnored()
-
     @startMarker = @editor.markBufferRange(@startTagRange, {})
 
     return unless @findEndTag()
@@ -49,19 +47,20 @@ class DoubleTag
       @copyNewTagToEnd()
 
   copyNewTagToEnd: ->
-    return if @editor.hasMultipleCursors() or @editorHasSelectedText()
-    newTag = @editor.getTextInBufferRange(@startMarker.getBufferRange())
-    # remove space after new tag, but allow blank new tag
-    origTagLength = newTag.length
-    if origTagLength
-      matches = newTag.match(/^[\w-]+/)
-      return @reset() unless matches
-      newTag = matches[0]
-    newTagLength = newTag.length
-    @editor.setTextInBufferRange(@endMarker.getBufferRange(), newTag)
-    # reset if a space was added
-    @reset() unless origTagLength != null and newTagLength != null and
-                    origTagLength == newTagLength
+    @editor.transact 1000, =>
+        return if @editor.hasMultipleCursors() or @editorHasSelectedText()
+        newTag = @editor.getTextInBufferRange(@startMarker.getBufferRange())
+        # remove space after new tag, but allow blank new tag
+        origTagLength = newTag.length
+        if origTagLength
+          matches = newTag.match(/^[\w-]+/)
+          return @reset() unless matches
+          newTag = matches[0]
+        newTagLength = newTag.length
+        @editor.setTextInBufferRange(@endMarker.getBufferRange(), newTag)
+        # reset if a space was added
+        @reset() unless origTagLength != null and newTagLength != null and
+                        origTagLength == newTagLength
 
   setFrontOfStartTag: ->
     frontRegex = /<(a-z)?/i
