@@ -222,3 +222,13 @@ describe "DoubleTag", ->
           editor.setCursorBufferPosition([0, 17])
 
           expect(editor.getText()).toBe html
+
+    describe "with erb inside tag", ->
+      describe "when cursor added to erb", ->
+        it "doesn't raise an error", ->
+          html = '<foo <%=foo(first, last)%>></foo>'
+          editor.setText(html)
+
+          editor.setCursorBufferPosition([0, 17])
+
+          expect(editor.getText()).toBe html
