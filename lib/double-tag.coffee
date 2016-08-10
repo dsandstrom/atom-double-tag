@@ -79,7 +79,7 @@ class DoubleTag
     row = @frontOfStartTag.row
     rowLength = @editor.buffer.lineLengthForRow(row)
 
-    backRegex = /[>\s/]/
+    backRegex = /($|[>\s/])/
     scanRange = new Range(@frontOfStartTag, new Point(row, rowLength))
     backOfStartTag = null
     @editor.buffer.scanInRange backRegex, scanRange, (obj) ->
