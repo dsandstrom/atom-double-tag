@@ -232,3 +232,14 @@ describe "DoubleTag", ->
           editor.setCursorBufferPosition([0, 17])
 
           expect(editor.getText()).toBe html
+
+    describe "with class on second line", ->
+      beforeEach ->
+        editor.setText('<foo\n  class="bar">foobar</foo>')
+
+      describe "when letter is removed", ->
+        it "removes letter form end tag", ->
+          editor.setCursorBufferPosition([0, 4])
+          editor.backspace()
+
+          expect(editor.getText()).toBe '<fo\n  class="bar">foobar</fo>'
