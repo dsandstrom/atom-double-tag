@@ -212,3 +212,13 @@ describe "DoubleTag", ->
           editor.insertText('-span')
 
           expect(editor.getText()).toBe '<dashed-span>test</dashed-span>'
+
+    describe "with php inside tag", ->
+      describe "when cursor added to php", ->
+        it "doesn't raise an error", ->
+          html = '<foo <?=$ifFoo(\'first\', \'last\')?>></foo>'
+          editor.setText(html)
+
+          editor.setCursorBufferPosition([0, 17])
+
+          expect(editor.getText()).toBe html

@@ -64,7 +64,7 @@ class DoubleTag
                     origTagLength == newTagLength
 
   setFrontOfStartTag: ->
-    frontRegex = /<(a-z)?/i
+    frontRegex = /<[a-z]+/i
     frontOfStartTag = @cursor.getBeginningOfCurrentWordBufferPosition(
       {wordRegex: frontRegex}
     )
