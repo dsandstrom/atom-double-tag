@@ -79,7 +79,7 @@ class DoubleTag
     row = @frontOfStartTag.row
     rowLength = @editor.buffer.lineLengthForRow(row)
 
-    backRegex = /[>\s]/
+    backRegex = /[^\w-]/
     endOfLine = new Point(row, rowLength)
     scanRange = new Range(@frontOfStartTag, endOfLine)
     backOfStartTag = null
@@ -103,7 +103,8 @@ class DoubleTag
     true
 
   findEndTag: ->
-    tagRegex = new RegExp("<\\/?#{@tagText}[>\\s]", 'gi')
+    regexSafeTagText = @tagText.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&')
+    tagRegex = new RegExp("<\\/?#{regexSafeTagText}[>\\s]", 'gi')
     endTagRange = null
     nestedTagCount = 0
     scanRange = new Range(@backOfStartTag, @editor.buffer.getEndPosition())

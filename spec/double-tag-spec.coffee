@@ -242,3 +242,14 @@ describe "DoubleTag", ->
           editor.backspace()
 
           expect(editor.getText()).toBe '<fo\n  class="bar">foobar</fo>'
+
+    describe "with parenthesis after tag", ->
+      beforeEach ->
+        editor.setText('<foo( class="bar">foobar</foo>')
+
+      describe "when letter is removed", ->
+        it "removes letter from end tag", ->
+          editor.setCursorBufferPosition([0, 4])
+          editor.backspace()
+
+          expect(editor.getText()).toBe '<fo( class="bar">foobar</fo>'
