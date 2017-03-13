@@ -12,7 +12,6 @@ describe "DoubleTag", ->
         atom.workspace.open('example.html').then (e) ->
           editor = e
           editorView = atom.views.getView(editor)
-          editor.setTabLength(2)
 
       waitsForPromise ->
         atom.packages.activatePackage('language-html')
