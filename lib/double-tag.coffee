@@ -89,7 +89,6 @@ class DoubleTag
     @backOfStartTag = backOfStartTag || endOfLine
 
   findStartTag: ->
-    # TODO: don't allow #, in tag
     @setFrontOfStartTag()
     return unless @frontOfStartTag
 
