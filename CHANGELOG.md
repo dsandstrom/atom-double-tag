@@ -1,3 +1,7 @@
+## 0.6.0
+_March 14, 2017_
+* Add support for xml and marko
+
 ## 0.5.0
 _March 14, 2017_
 * Really fix tags with attributes not on the first line
