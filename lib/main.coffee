@@ -20,9 +20,9 @@ module.exports =
       editorScope = editor.getRootScopeDescriptor?().getScopesArray()
       return unless editorScope and editorScope.length
 
-      # TODO: make sure language is loaded
       # TODO: add option for language scope
-      return unless /text\.(html|xml)|source\.js\.jsx/.test(editorScope[0])
+      editorScopeRegex = /text\.(html|xml|marko)|source\.js\.jsx/
+      return unless editorScopeRegex.test(editorScope[0])
 
       doubleTag = new DoubleTag(editor)
       doubleTag.watchForTag()

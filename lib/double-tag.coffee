@@ -135,7 +135,8 @@ class DoubleTag
     scopes = scopeDescriptor.getScopesArray()
     return unless scopes and scopes.length
 
-    scopes.some (scope) -> /meta\.tag/.test(scope)
+    tagScopeRegex = /meta\.tag|tag\.\w+(\.\w+)?\.html/
+    scopes.some (scope) -> tagScopeRegex.test(scope)
 
   cursorIsInStartTag: ->
     cursorPosition = @cursor.getBufferPosition()
