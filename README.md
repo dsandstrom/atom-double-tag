@@ -16,6 +16,6 @@ Edit the start tag (`<div>`) and the matching end tag (`</div>`) will be changed
 
 
 ### Notes
-* Supported Languages: HTML, PHP, ERB, JSX
+* Supported Languages: HTML, PHP, ERB, JSX, XML, marko
 * In beta.  Issues and Pull Requests are welcome.
 * Recording done with: [screen-recorder](https://atom.io/packages/screen-recorder)
