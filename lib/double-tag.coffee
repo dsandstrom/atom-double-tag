@@ -103,7 +103,8 @@ class DoubleTag
     true
 
   findEndTag: ->
-    regexSafeTagText = @tagText.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&')
+    regexSafeTagText =
+      @tagText.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&')
     tagRegex = new RegExp("<\\/?#{regexSafeTagText}[>\\s]", 'gi')
     endTagRange = null
     nestedTagCount = 0
