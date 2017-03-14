@@ -1,3 +1,8 @@
+## 0.5.0
+_March 14, 2017_
+* Really fix tags with attributes not on the first line
+* Don't allow invalid characters in tags to have an effect
+
 ## 0.4.0
 _August 10, 2016_
 * Fixed tag finding regex when the tag has no attributes on the first line, but attributes on the second line
