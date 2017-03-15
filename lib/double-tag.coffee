@@ -31,7 +31,7 @@ class DoubleTag
   # private
 
   findTag: (@cursor) ->
-    return if @editor.hasMultipleCursors() or @editorHasSelectedText()
+    return if @editor.hasMultipleCursors()
     return unless @cursorInHtmlTag()
 
     return unless @findStartTag()
