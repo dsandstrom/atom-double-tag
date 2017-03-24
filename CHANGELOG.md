@@ -1,6 +1,10 @@
+## 0.7.0
+_March 24, 2017_
+* Allowed backspacing into tag to edit it
+
 ## 0.6.0
 _March 14, 2017_
-* Add support for xml and marko
+* Added support for xml and marko
 
 ## 0.5.0
 _March 14, 2017_
