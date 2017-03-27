@@ -1,3 +1,7 @@
+## 0.8.0
+_March 27, 2017_
+* Code clean up
+
 ## 0.7.0
 _March 24, 2017_
 * Allowed backspacing into tag to edit it
