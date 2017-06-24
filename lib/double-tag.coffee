@@ -6,6 +6,7 @@ class DoubleTag
   constructor: (@editor) ->
     @subscriptions = new CompositeDisposable
     @foundTag = false
+    @watchForTag()
 
   destroy: ->
     @subscriptions?.dispose()

@@ -25,8 +25,6 @@ module.exports =
       return unless editorScopeRegex.test(editorScope[0])
 
       doubleTag = new DoubleTag(editor)
-      doubleTag.watchForTag()
-
       editor.onDidDestroy -> doubleTag?.destroy()
 
   deactivate: -> @subscriptions?.dispose()
