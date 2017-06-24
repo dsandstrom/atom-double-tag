@@ -36,7 +36,7 @@ class DoubleTag
 
     @startMarker = @editor.markBufferRange(@startTagRange, {})
 
-    return unless @findEndTag()
+    return unless @findMatchingEndTag()
     @endMarker = @editor.markBufferRange(@endTagRange, {})
     @foundTag = true
 
@@ -98,7 +98,7 @@ class DoubleTag
     @tagText = @editor.getTextInBufferRange(@startTagRange)
     true
 
-  findEndTag: ->
+  findMatchingEndTag: ->
     regexSafeTagText =
       @tagText.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&')
     tagRegex = new RegExp("<\\/?#{regexSafeTagText}[>\\s]", 'gi')
