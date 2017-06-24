@@ -114,21 +114,20 @@ describe "DoubleTag", ->
 
             expect(editor.getText()).toBe '< class="css">test</>'
 
-    # failing test for #1
-    # describe "with an tag with class", ->
-    #   beforeEach ->
-    #     editor.setText('<div  class="css">test</div>')
-    #
-    #   describe "when cursor is a space away from the tag", ->
-    #     beforeEach ->
-    #       editor.setCursorBufferPosition([0, 5])
-    #
-    #     describe "and backspaced to the tag", ->
-    #       it "copies the tag text to the end tag", ->
-    #         editor.backspace()
-    #         # editor.insertText('v')
-    #
-    #         expect(editor.getText()).toBe '<divv class="css">test</divv>'
+    describe "with an tag with class", ->
+      beforeEach ->
+        editor.setText('<div  class="css">test</div>')
+
+      describe "when cursor is a space away from the tag", ->
+        beforeEach ->
+          editor.setCursorBufferPosition([0, 5])
+
+        describe "and backspaced to the tag", ->
+          it "copies the tag text to the end tag", ->
+            editor.backspace()
+            editor.insertText('v')
+
+            expect(editor.getText()).toBe '<divv class="css">test</divv>'
 
     describe "with an multiple line div tag", ->
       beforeEach ->
