@@ -18,7 +18,7 @@ module.exports =
 
     @subscriptions.add atom.workspace.observeTextEditors (editor) ->
       editorScope = editor.getRootScopeDescriptor?().getScopesArray()
-      return unless editorScope and editorScope.length
+      return unless editorScope?.length
 
       # TODO: add option for language scope
       editorScopeRegex = /text\.(html|xml|marko)|source\.js\.jsx/
