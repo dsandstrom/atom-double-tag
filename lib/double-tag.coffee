@@ -6,6 +6,7 @@ class DoubleTag
   constructor: (@editor) ->
     @subscriptions = new CompositeDisposable
     @foundTag = false
+    @foundEndTag = false
     @watchForTag()
 
   destroy: ->
@@ -13,13 +14,14 @@ class DoubleTag
 
   watchForTag: ->
     @subscriptions.add @editor.onDidChangeCursorPosition (event) =>
-      @reset() if @foundTag and @cursorLeftMarker()
-      return if @foundTag
-
+      @reset() if @foundTag and @cursorLeftMarker(@startMarker)
+      @reset() if @foundEndTag and @cursorLeftMarker(@endMarker)
+      return if @foundTag || @foundEndTag
       @findTag(event.cursor)
 
   reset: ->
     @foundTag = false
+    @foundEndTag = false
     @startMarker.destroy()
     @endMarker.destroy()
     @startMaker = null
@@ -31,19 +33,28 @@ class DoubleTag
     return if @editor.hasMultipleCursors()
     return unless @cursorInHtmlTag()
 
-    return unless @findStartTag()
-    return if @tagShouldBeIgnored()
+    if @findStartTag()
+      return if @tagShouldBeIgnored()
 
-    @startMarker = @editor.markBufferRange(@startTagRange, {})
+      @startMarker = @editor.markBufferRange(@startTagRange, {})
 
-    return unless @findMatchingEndTag()
-    @endMarker = @editor.markBufferRange(@endTagRange, {})
-    @foundTag = true
+      return unless @findMatchingEndTag()
+      @endMarker = @editor.markBufferRange(@endTagRange, {})
+      @foundTag = true
 
-    return unless @foundTag
+      @subscriptions.add @startMarker.onDidChange (event) =>
+        @copyNewTagToEnd()
+    else if @findEndTag()
+      return if @tagShouldBeIgnored()
 
-    @subscriptions.add @startMarker.onDidChange (event) =>
-      @copyNewTagToEnd()
+      @endMarker = @editor.markBufferRange(@endTagRange, {})
+
+      return unless @findMatchingStartTag()
+      @startMarker = @editor.markBufferRange(@startTagRange, {})
+      @foundEndTag = true
+
+      @subscriptions.add @endMarker.onDidChange (event) =>
+        @copyNewTagToStart()
 
   copyNewTagToEnd: ->
     return if @editor.hasMultipleCursors()
@@ -60,6 +71,21 @@ class DoubleTag
     @reset() unless origTagLength != null and newTagLength != null and
                     origTagLength == newTagLength
 
+  copyNewTagToStart: ->
+    return if @editor.hasMultipleCursors()
+    newTag = @editor.getTextInBufferRange(@endMarker.getBufferRange())
+    # remove space after new tag, but allow blank new tag
+    origTagLength = newTag.length
+    if origTagLength
+      matches = newTag.match(/^[\w-]+/)
+      return @reset() unless matches
+      newTag = matches[0]
+    newTagLength = newTag.length
+    @editor.setTextInBufferRange(@startMarker.getBufferRange(), newTag)
+    # reset if a space was added
+    @reset() unless origTagLength != null and newTagLength != null and
+                    origTagLength == newTagLength
+
   setFrontOfStartTag: ->
     frontRegex = /<[a-z]+/i
     frontOfStartTag = @cursor.getBeginningOfCurrentWordBufferPosition(
@@ -70,6 +96,16 @@ class DoubleTag
     # don't include <
     @frontOfStartTag = new Point(
       frontOfStartTag.row, frontOfStartTag.column + 1
+    )
+
+  setFrontOfEndTag: ->
+    endRegex = new RegExp("</", "i")
+    frontOfEndTag =
+      @cursor.getBeginningOfCurrentWordBufferPosition({wordRegex: endRegex})
+
+    # don't include <
+    @frontOfEndTag = new Point(
+      frontOfEndTag.row, frontOfEndTag.column + 2
     )
 
   setBackOfStartTag: ->
@@ -84,6 +120,19 @@ class DoubleTag
       backOfStartTag = obj.range.start
       obj.stop()
     @backOfStartTag = backOfStartTag || endOfLine
+
+  setBackOfEndTag: ->
+    row = @frontOfEndTag.row
+    rowLength = @editor.buffer.lineLengthForRow(row)
+
+    backRegex = /[^\w-]/
+    endOfLine = new Point(row, rowLength)
+    scanRange = new Range(@frontOfEndTag, endOfLine)
+    backOfEndTag = null
+    @editor.buffer.scanInRange backRegex, scanRange, (obj) ->
+      backOfEndTag = obj.range.start
+      obj.stop()
+    @backOfEndTag = backOfEndTag || endOfLine
 
   findStartTag: ->
     @setFrontOfStartTag()
@@ -121,6 +170,45 @@ class DoubleTag
     )
     true
 
+  findMatchingStartTag: ->
+    # TODO: move regex to string
+    regexSafeTagText =
+      @tagText.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&')
+    tagRegex = new RegExp("<\\/?#{regexSafeTagText}([> ]|(?=\\n))", 'gi')
+    startTagRange = null
+    nestedTagCount = 0
+    scanRange = new Range([0, 0], @frontOfEndTag)
+    @editor.buffer.backwardsScanInRange tagRegex, scanRange, (obj) ->
+      if obj.matchText.match(/^<\//)
+        nestedTagCount++
+      else
+        nestedTagCount--
+      if nestedTagCount < 0
+        startTagRange = obj.range
+        obj.stop()
+    return unless startTagRange
+    # don't include <
+    rangeStart = [startTagRange.start.row, startTagRange.start.column + 1]
+    if /\w$/.test(@editor.getTextInBufferRange(startTagRange))
+      rangeEnd = startTagRange.end
+    else
+      # don't include >
+      rangeEnd = [startTagRange.end.row, startTagRange.end.column - 1]
+    @startTagRange = new Range(rangeStart, rangeEnd)
+    true
+
+  findEndTag: ->
+    @setFrontOfEndTag()
+    return unless @frontOfEndTag
+
+    @setBackOfEndTag()
+    return unless @backOfEndTag
+
+    @endTagRange = new Range(@frontOfEndTag, @backOfEndTag)
+
+    @tagText = @editor.getTextInBufferRange(@endTagRange)
+    true
+
   cursorInHtmlTag: ->
     scopeDescriptor = @cursor?.getScopeDescriptor()
     return unless scopeDescriptor
@@ -136,9 +224,14 @@ class DoubleTag
     return unless @startTagRange.containsPoint(cursorPosition)
     true
 
-  cursorLeftMarker: ->
+  cursorIsInEndTag: ->
     cursorPosition = @cursor.getBufferPosition()
-    !@startMarker.getBufferRange().containsPoint(cursorPosition)
+    return unless @endTagRange.containsPoint(cursorPosition)
+    true
+
+  cursorLeftMarker: (marker) ->
+    cursorPosition = @cursor.getBufferPosition()
+    !marker.getBufferRange().containsPoint(cursorPosition)
 
   tagShouldBeIgnored: ->
     atom.config.get('double-tag.ignoredTags')?.indexOf(@tagText) >= 0
