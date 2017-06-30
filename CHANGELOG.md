@@ -1,3 +1,7 @@
+## 0.9.0
+_June 29, 2017_
+* Add support for editing end tag
+
 ## 0.8.0
 _March 27, 2017_
 * Code clean up
