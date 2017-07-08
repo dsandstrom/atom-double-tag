@@ -64,6 +64,25 @@ describe "DoubleTag", ->
 
             expect(editor.getText()).toBe '< >test</>'
 
+        describe "and undo after changing tag", ->
+          it "doesn't add a space to the end tag", ->
+            editor.insertText('v')
+            expect(editor.getText()).toBe '<divv>test</divv>'
+            editor.undo()
+            expect(editor.getText()).toBe '<div>test</div>'
+
+        describe "and redo after undo after changing tag", ->
+          it "changes both tags at the same time", ->
+            console.log 'add v'
+            editor.insertText('v')
+            expect(editor.getText()).toBe '<divv>test</divv>'
+            console.log 'undo'
+            editor.undo()
+            expect(editor.getText()).toBe '<div>test</div>'
+            console.log 'redo'
+            editor.redo()
+            expect(editor.getText()).toBe '<divv>test</divv>'
+
       describe "when cursor is at the front of a start tag", ->
         beforeEach ->
           editor.setCursorBufferPosition([0, 1])
@@ -299,6 +318,25 @@ describe "DoubleTag", ->
             editor.insertText(' ')
 
             expect(editor.getText()).toBe '<>test</ >'
+
+        describe "and undo after changing tag", ->
+          it "doesn't add a space to the end tag", ->
+            editor.insertText('v')
+            expect(editor.getText()).toBe '<divv>test</divv>'
+            editor.undo()
+            expect(editor.getText()).toBe '<div>test</div>'
+
+        describe "and redo after undo after changing tag", ->
+          it "changes both tags at the same time", ->
+            console.log 'add v'
+            editor.insertText('v')
+            expect(editor.getText()).toBe '<divv>test</divv>'
+            console.log 'undo'
+            editor.undo()
+            expect(editor.getText()).toBe '<div>test</div>'
+            console.log 'redo'
+            editor.redo()
+            expect(editor.getText()).toBe '<divv>test</divv>'
 
       describe "when cursor is at the front of a end tag", ->
         beforeEach ->
