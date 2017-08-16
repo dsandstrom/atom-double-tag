@@ -72,6 +72,7 @@ class DoubleTag
                     origTagLength == newTagLength
 
   copyNewTagToStart: ->
+    return if atom.config.get('double-tag.ignoredTags')
     return if @editor.hasMultipleCursors()
     newTag = @editor.getTextInBufferRange(@endMarker.getBufferRange())
     # remove space after new tag, but allow blank new tag
