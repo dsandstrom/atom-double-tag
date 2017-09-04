@@ -180,7 +180,7 @@ describe "DoubleTag", ->
           expect(editor.getText()).toBe '<div>\n  <p>test</p>\n</div>'
 
       describe "when inner end tag is changed", ->
-        it "copies the new tag to the end", ->
+        it "copies the new tag to the start", ->
           editor.setCursorBufferPosition([1, 18])
           editor.backspace() for [1..4]
           editor.insertText('p')
@@ -417,7 +417,7 @@ describe "DoubleTag", ->
           expect(editor.getText()).toBe '<div>\n  <p>test</p>\n</div>'
 
       describe "when inner start tag is changed", ->
-        it "copies the new tag to the start", ->
+        it "copies the new tag to the end", ->
           editor.setCursorBufferPosition([1, 7])
           editor.backspace() for [1..4]
           editor.insertText('p')
@@ -502,7 +502,7 @@ describe "DoubleTag", ->
   describe "for a start tag", ->
     beforeEach ->
       atom.config.set('double-tag.disableEditEndTagSync', true)
-      
+
     describe "with an inline div tag", ->
       beforeEach ->
         editor.setText('<div>test</div>')
@@ -664,12 +664,12 @@ describe "DoubleTag", ->
           expect(editor.getText()).toBe '<div>\n  <p>test</p>\n</div>'
 
       describe "when inner end tag is changed", ->
-        it "copies the new tag to the end", ->
+        it "does not copy the new tag to the start", ->
           editor.setCursorBufferPosition([1, 18])
           editor.backspace() for [1..4]
           editor.insertText('p')
 
-          expect(editor.getText()).toBe '<div>\n  <p>test</p>\n</div>'
+          expect(editor.getText()).toBe '<div>\n  <span>test</p>\n</div>'
 
     describe "with nested div tags", ->
       beforeEach ->
@@ -904,7 +904,7 @@ describe "DoubleTag", ->
           expect(editor.getText()).toBe '<div>\n  <span>test</p>\n</div>'
 
       describe "when inner start tag is changed", ->
-        it "copies the new tag to the start", ->
+        it "copies the new tag to the end", ->
           editor.setCursorBufferPosition([1, 7])
           editor.backspace() for [1..4]
           editor.insertText('p')
