@@ -15,7 +15,7 @@ module.exports =
     disableEditEndTagSync:
       description: 'This will stop edits to the closing tag from affecting the start tag'
       type: 'boolean'
-      default: true
+      default: false
 
   activate: (state) ->
     @subscriptions = new CompositeDisposable
