@@ -1,3 +1,7 @@
+## 1.0.0
+_November 3, 2017_
+* Get clipboard history working
+
 ## 0.9.0
 _June 29, 2017_
 * Add support for editing end tag
