@@ -44,7 +44,7 @@ class DoubleTag
 
       @subscriptions.add @startMarker.onDidChange (event) =>
         @copyNewTagToEnd()
-    else if @findEndTag()
+    else if atom.config.get('double-tag.allowEndTagSync') and @findEndTag()
       return if @tagShouldBeIgnored()
 
       @endMarker = @editor.markBufferRange(@endTagRange, {})

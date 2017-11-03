@@ -108,6 +108,17 @@ describe "DoubleTag", ->
 
           expect(editor.getText()).toBe '<divs>tsest</div>'
 
+      describe "when allowEndTagSync is false", ->
+        beforeEach ->
+          atom.config.set('double-tag.allowEndTagSync', false)
+          editor.setCursorBufferPosition([0, 4])
+
+        describe "and a letter is added", ->
+          it "still copies the letter to the end tag", ->
+            editor.insertText('s')
+
+            expect(editor.getText()).toBe '<divs>test</divs>'
+
     describe "with an tag with class", ->
       beforeEach ->
         editor.setText('<div class="css">test</div>')
@@ -359,6 +370,17 @@ describe "DoubleTag", ->
           editor.insertText('s')
 
           expect(editor.getText()).toBe '<div>tsest</divs>'
+
+      describe "when allowEndTagSync is false", ->
+        beforeEach ->
+          atom.config.set('double-tag.allowEndTagSync', false)
+          editor.setCursorBufferPosition([0, 14])
+
+        describe "and a letter is added", ->
+          it "doesn't copy the letter to the start tag", ->
+            editor.insertText('s')
+
+            expect(editor.getText()).toBe '<div>test</divs>'
 
     describe "with an tag with class", ->
       beforeEach ->

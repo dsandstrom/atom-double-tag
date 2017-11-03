@@ -12,6 +12,10 @@ module.exports =
         'html', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source',
         'title', 'track', 'wbr'
       ]
+    allowEndTagSync:
+      description: 'Editing the end tag will change the start tag'
+      type: 'boolean'
+      default: true
 
   activate: (state) ->
     @subscriptions = new CompositeDisposable
