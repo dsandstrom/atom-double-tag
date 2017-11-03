@@ -73,13 +73,10 @@ describe "DoubleTag", ->
 
         describe "and redo after undo after changing tag", ->
           it "changes both tags at the same time", ->
-            console.log 'add v'
             editor.insertText('v')
             expect(editor.getText()).toBe '<divv>test</divv>'
-            console.log 'undo'
             editor.undo()
             expect(editor.getText()).toBe '<div>test</div>'
-            console.log 'redo'
             editor.redo()
             expect(editor.getText()).toBe '<divv>test</divv>'
 
@@ -328,13 +325,10 @@ describe "DoubleTag", ->
 
         describe "and redo after undo after changing tag", ->
           it "changes both tags at the same time", ->
-            console.log 'add v'
             editor.insertText('v')
             expect(editor.getText()).toBe '<divv>test</divv>'
-            console.log 'undo'
             editor.undo()
             expect(editor.getText()).toBe '<div>test</div>'
-            console.log 'redo'
             editor.redo()
             expect(editor.getText()).toBe '<divv>test</divv>'
 
