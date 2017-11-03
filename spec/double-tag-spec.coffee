@@ -4,7 +4,6 @@ describe "DoubleTag", ->
   beforeEach ->
     workspaceElement = atom.views.getView(atom.workspace)
     jasmine.attachToDOM(workspaceElement)
-    atom.config.set('double-tag.debug', false)
 
     waitsForPromise ->
       atom.workspace.open('example.html').then (e) ->
