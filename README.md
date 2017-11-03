@@ -13,6 +13,7 @@ Edit the start tag (`<div>`) and the matching end tag (`</div>`) will be changed
 ### Configs
 * **ignoredTags** - HTML tags that are ignored.  (Default:
 `area, base, body, br, col, command, embed, head, hr, html, img, input, keygen, link, meta, param, source, title, track, wbr`)
+* **allowEndTagSync** - Whether editing the end tag will change the start tag.  (Default: `true`)
 
 ### Notes
 * Supported Languages: HTML, PHP, ERB, JSX, XML, marko
