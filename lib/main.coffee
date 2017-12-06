@@ -4,6 +4,12 @@ DoubleTag = require './double-tag'
 module.exports =
   subscriptions: null
   config:
+    enabledScopes:
+      description: 'double-tag will be enabled in the following language scopes'
+      type: 'array'
+      default: [
+        'text.html', 'text.xml', 'text.marko', 'source.js', 'source.jsx', 'source.tsx'
+      ]
     ignoredTags:
       description: 'These HTML tags will be skipped'
       type: 'array'
@@ -24,9 +30,7 @@ module.exports =
       editorScope = editor.getRootScopeDescriptor?().getScopesArray()
       return unless editorScope?.length
 
-      # TODO: add option for language scope
-      editorScopeRegex = /text\.(html|xml|marko)|source\.js\.jsx/
-      return unless editorScopeRegex.test(editorScope[0])
+      return unless atom.config.get('double-tag.enabledScopes').includes(editorScope[0])
 
       doubleTag = new DoubleTag(editor)
       editor.onDidDestroy -> doubleTag?.destroy()
