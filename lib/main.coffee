@@ -8,7 +8,7 @@ module.exports =
       description: 'double-tag will be enabled in the following language scopes'
       type: 'array'
       default: [
-        'text.html', 'text.xml', 'text.marko', 'source.js', 'source.jsx', 'source.tsx'
+        'text.html', 'text.html.basic', 'text.xml', 'text.marko', 'source.js.jsx', 'source.tsx'
       ]
     ignoredTags:
       description: 'These HTML tags will be skipped'
