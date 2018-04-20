@@ -66,11 +66,8 @@ class DoubleTag
       return @reset() unless matches
       newTag = matches[0]
     newTagLength = newTag.length
-    @editor.setTextInBufferRange(
-      @endMarker.getBufferRange(),
-      newTag,
-      undo: 'skip'
-    )
+    @editor.setTextInBufferRange(@endMarker.getBufferRange(), newTag)
+    @editor.buffer.groupLastChanges()
     # reset if a space was added
     @reset() unless origTagLength != null and newTagLength != null and
                     origTagLength == newTagLength
@@ -85,11 +82,8 @@ class DoubleTag
       return @reset() unless matches
       newTag = matches[0]
     newTagLength = newTag.length
-    @editor.setTextInBufferRange(
-      @startMarker.getBufferRange(),
-      newTag,
-      undo: 'skip'
-    )
+    @editor.setTextInBufferRange(@startMarker.getBufferRange(), newTag)
+    @editor.buffer.groupLastChanges()
     # reset if a space was added
     @reset() unless origTagLength != null and newTagLength != null and
                     origTagLength == newTagLength
