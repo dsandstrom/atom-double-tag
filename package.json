@@ -7,7 +7,7 @@
     "html"
   ],
   "activationCommands": {},
-  "repository": "https://github.com/dsandstrom/atom-double-tag",
+  "repository": "git@github.com:dsandstrom/atom-double-tag",
   "license": "MIT",
   "engines": {
     "atom": ">=1.25.0 <2.0.0"
