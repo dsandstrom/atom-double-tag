@@ -1,3 +1,7 @@
+## 1.2.0
+_April 24, 2018_
+* Removed deprecated `undo` option from `setTextInBufferRange`
+
 ## 1.1.0
 _November 3, 2017_
 * Added option to disable end tag syncing
