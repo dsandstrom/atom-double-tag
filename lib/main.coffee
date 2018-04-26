@@ -22,7 +22,7 @@ module.exports =
     allowEndTagSync:
       description: 'Editing the end tag will change the start tag'
       type: 'boolean'
-      default: true
+      default: false
 
   activate: (state) ->
     @subscriptions = new CompositeDisposable

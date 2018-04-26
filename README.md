@@ -14,7 +14,7 @@ Edit the start tag (`<div>`) and the matching end tag (`</div>`) will be changed
 * **enabledScopes** - Language scopes that are active (Default: `text.html, text.html.basic, text.xml, text.marko, source.js.jsx, source.tsx, text.html.erb, text.html.php`)
 * **ignoredTags** - HTML tags that are ignored.  (Default:
 `area, base, body, br, col, command, embed, head, hr, html, img, input, keygen, link, meta, param, source, title, track, wbr`)
-* **allowEndTagSync** - Whether editing the end tag will change the start tag.  (Default: `true`)
+* **allowEndTagSync** - Whether editing the end tag will change the start tag.  (Default: `false`)
 
 ### Notes
 * Supported Languages: HTML, PHP, ERB, JSX, XML, marko
