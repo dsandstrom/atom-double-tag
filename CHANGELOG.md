@@ -1,3 +1,8 @@
+## 1.3.0
+_April 26, 2018_
+* Changed `allowEndTagSync` config default to false
+* Added erb and php to default enabled scopes
+
 ## 1.2.0
 _April 24, 2018_
 * Removed deprecated `undo` option from `setTextInBufferRange`
