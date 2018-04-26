@@ -5,10 +5,11 @@ module.exports =
   subscriptions: null
   config:
     enabledScopes:
-      description: 'double-tag will be enabled in the following language scopes'
+      description: 'Language scopes that are active'
       type: 'array'
       default: [
-        'text.html', 'text.html.basic', 'text.xml', 'text.marko', 'source.js.jsx', 'source.tsx'
+        'text.html', 'text.html.basic', 'text.xml', 'text.marko',
+        'source.js.jsx', 'source.tsx', 'text.html.erb', 'text.html.php'
       ]
     ignoredTags:
       description: 'These HTML tags will be skipped'
