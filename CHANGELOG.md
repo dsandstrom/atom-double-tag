@@ -1,3 +1,7 @@
+## 1.4.0
+_April 27, 2018_
+* Fix bug when adding inner tag that is similar to it's parent
+
 ## 1.3.0
 _April 26, 2018_
 * Changed `allowEndTagSync` config default to false
