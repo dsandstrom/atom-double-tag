@@ -236,6 +236,17 @@ describe "DoubleTag", ->
 
           expect(editor.getText()).toBe '<dashed-span>test</dashed-span>'
 
+    describe "with uppercase tag", ->
+      beforeEach ->
+        editor.setText('<DIV>test</DIV>')
+
+      describe "when tag is changed", ->
+        it "copies the new tag to the end", ->
+          editor.setCursorBufferPosition([0, 4])
+          editor.insertText('S')
+
+          expect(editor.getText()).toBe '<DIVS>test</DIVS>'
+
     describe "with php inside tag", ->
       describe "when cursor added to php", ->
         it "doesn't raise an error", ->
