@@ -289,6 +289,17 @@ describe "DoubleTag", ->
 
           expect(editor.getText()).toBe '<fo( class="bar">foobar</fo>'
 
+    describe "with incomplete inner tag", ->
+      beforeEach ->
+        editor.setText('<foo>\n<foo\n</foo>')
+
+      describe "when adding a letter to the inner tag", ->
+        it "doesn't edit end tag", ->
+          editor.setCursorBufferPosition([1, 4])
+          editor.insertText('b')
+
+          expect(editor.getText()).toBe '<foo>\n<foob\n</foo>'
+
   describe "for a end tag", ->
     describe "when not allowing end tag sync", ->
       beforeEach ->

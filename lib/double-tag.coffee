@@ -141,7 +141,7 @@ class DoubleTag
     return unless @frontOfStartTag
 
     @setBackOfStartTag()
-    return unless @backOfStartTag
+    return unless @backOfStartTag and @tagIsComplete()
 
     @startTagRange = new Range(@frontOfStartTag, @backOfStartTag)
     return unless @cursorIsInStartTag()
@@ -237,3 +237,11 @@ class DoubleTag
 
   tagShouldBeIgnored: ->
     atom.config.get('double-tag.ignoredTags')?.indexOf(@tagText) >= 0
+
+  tagIsComplete: ->
+    tagIsComplete = false
+    scanRange = new Range(@backOfStartTag, @editor.buffer.getEndPosition())
+    regex = new RegExp('<|>')
+    @editor.buffer.scanInRange regex, scanRange, (obj) ->
+      tagIsComplete = obj.matchText == '>'
+    tagIsComplete
