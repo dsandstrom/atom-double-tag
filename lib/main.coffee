@@ -31,7 +31,9 @@ module.exports =
       editorScope = editor.getRootScopeDescriptor?().getScopesArray()
       return unless editorScope?.length
 
-      return unless atom.config.get('double-tag.enabledScopes').includes(editorScope[0])
+      scopeEnabled =
+        atom.config.get('double-tag.enabledScopes').includes(editorScope[0])
+      return unless scopeEnabled
 
       doubleTag = new DoubleTag(editor)
       editor.onDidDestroy -> doubleTag?.destroy()

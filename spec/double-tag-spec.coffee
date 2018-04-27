@@ -463,7 +463,7 @@ describe "DoubleTag", ->
           it "copies the new tag to the start", ->
             expect(editor.getText()).toBe '<h3>\n  <span>test</span>\n</h3>'
 
-          describe "then inner tag is changed after moving cursor with arrows", ->
+          describe "then inner tag changed after moving cursor with arrows", ->
             it "copies the new tag to the start", ->
               editor.moveUp()
               editor.moveRight(14)
