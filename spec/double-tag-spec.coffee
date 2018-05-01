@@ -322,6 +322,17 @@ describe "DoubleTag", ->
 
           expect(editor.getText()).toBe '<foo>\n<foob\n</foo>'
 
+    describe "with self-closed inner tag", ->
+      beforeEach ->
+        editor.setText('<foo>\n  <foo />\n</foo>')
+
+      describe "when adding a letter to the inner tag", ->
+        it "doesn't change the other tags", ->
+          editor.setCursorBufferPosition([1, 6])
+          editor.insertText('b')
+
+          expect(editor.getText()).toBe '<foo>\n  <foob />\n</foo>'
+
   describe "for a end tag", ->
     describe "when not allowing end tag sync", ->
       beforeEach ->

@@ -243,7 +243,7 @@ class DoubleTag
     scanRange = new Range(@backOfStartTag, @editor.buffer.getEndPosition())
     nextCharacter = @editor.getTextInBufferRange(scanRange)?[0]
     return true if nextCharacter == '>'
-    regex = new RegExp('<[^?%]|[^?%]>', 'i')
+    regex = new RegExp('<[^?%]|[^?%/]>', 'i')
     @editor.buffer.scanInRange regex, scanRange, (obj) ->
       tagIsComplete = (/>$/).test(obj.matchText)
     tagIsComplete
