@@ -257,6 +257,17 @@ describe "DoubleTag", ->
 
           expect(editor.getText()).toBe html
 
+      describe "when letter added to start tag", ->
+        it "adds a letter to the end tag", ->
+          html = '<foo <?= foo ?>></foo>'
+          editor.setText(html)
+
+          editor.setCursorBufferPosition([0, 4])
+          editor.insertText('b')
+
+          html = '<foob <?= foo ?>></foob>'
+          expect(editor.getText()).toBe html
+
     describe "with erb inside tag", ->
       describe "when cursor added to erb", ->
         it "doesn't raise an error", ->
@@ -265,6 +276,17 @@ describe "DoubleTag", ->
 
           editor.setCursorBufferPosition([0, 17])
 
+          expect(editor.getText()).toBe html
+
+      describe "when letter added to start tag", ->
+        it "adds a letter to the end tag", ->
+          html = '<foo <%= foo %>></foo>'
+          editor.setText(html)
+
+          editor.setCursorBufferPosition([0, 4])
+          editor.insertText('b')
+
+          html = '<foob <%= foo %>></foob>'
           expect(editor.getText()).toBe html
 
     describe "with class on second line", ->
