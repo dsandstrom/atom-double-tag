@@ -1,3 +1,7 @@
+## 1.4.1
+_May 1, 2018_
+* Improve logic for making sure current tag is complete before searching for match
+
 ## 1.4.0
 _April 27, 2018_
 * Fix bug when adding inner tag that is similar to it's parent
