@@ -1,3 +1,7 @@
+## 1.5.0
+_May 8, 2018_
+* Add Laravel Blade to default scopes
+
 ## 1.4.1
 _May 1, 2018_
 * Improve logic for making sure current tag is complete before searching for match

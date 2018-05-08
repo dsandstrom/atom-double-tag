@@ -9,7 +9,8 @@ module.exports =
       type: 'array'
       default: [
         'text.html', 'text.html.basic', 'text.xml', 'text.marko',
-        'source.js.jsx', 'source.tsx', 'text.html.erb', 'text.html.php'
+        'source.js.jsx', 'source.tsx', 'text.html.erb', 'text.html.php',
+        'text.html.php.blade'
       ]
     ignoredTags:
       description: 'These HTML tags will be skipped'
