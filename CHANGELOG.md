@@ -1,3 +1,7 @@
+## 1.6.0
+_December 15, 2018_
+* Fix html syntax when using tree sitter
+
 ## 1.5.0
 _May 8, 2018_
 * Add Laravel Blade to default scopes
