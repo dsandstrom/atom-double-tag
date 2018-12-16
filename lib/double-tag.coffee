@@ -31,7 +31,7 @@ class DoubleTag
 
   findTag: (@cursor) ->
     return if @editor.hasMultipleCursors()
-    return unless @cursorInHtmlTag()
+    return unless @cursorInHtmlTag() || @cursorInTreeSitterTag()
 
     if @findStartTag()
       return if @tagShouldBeIgnored()
@@ -212,14 +212,23 @@ class DoubleTag
     true
 
   cursorInHtmlTag: ->
-    scopeDescriptor = @cursor?.getScopeDescriptor()
-    return unless scopeDescriptor
-
-    scopes = scopeDescriptor.getScopesArray()
-    return unless scopes and scopes.length
-
+    scopes = getScopes(@cursor)
+    return unless scopes?.length
     tagScopeRegex = /meta\.tag|tag\.\w+(\.\w+)?\.html/
     scopes.some (scope) -> tagScopeRegex.test(scope)
+
+  cursorInTreeSitterTag: ->
+    htmlScope = 'entity.name.tag'
+    scopes = getScopes(@cursor)
+    return unless scopes?.length
+    return true if scopes[scopes.length - 1] == htmlScope
+
+    leftPosition = [@cursor.getBufferRow(), @cursor.getBufferColumn() - 1]
+    scopeDescriptor = @editor.scopeDescriptorForBufferPosition(leftPosition)
+    return unless scopeDescriptor
+    scopes = scopeDescriptor.getScopesArray()
+    return unless scopes?.length
+    scopes[scopes.length - 1] == htmlScope
 
   cursorIsInStartTag: ->
     cursorPosition = @cursor.getBufferPosition()
@@ -247,3 +256,8 @@ class DoubleTag
     @editor.buffer.scanInRange regex, scanRange, (obj) ->
       tagIsComplete = (/>$/).test(obj.matchText)
     tagIsComplete
+
+  getScopes = (cursor) ->
+    scopeDescriptor = cursor?.getScopeDescriptor()
+    return unless scopeDescriptor
+    scopeDescriptor.getScopesArray()
