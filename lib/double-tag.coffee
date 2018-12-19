@@ -59,6 +59,9 @@ class DoubleTag
   copyNewTagToEnd: ->
     return if @editor.hasMultipleCursors()
     newTag = @editor.getTextInBufferRange(@startMarker.getBufferRange())
+    oldTag = @editor.getTextInBufferRange(@endMarker.getBufferRange())
+    # ran undo
+    return @reset() if newTag == oldTag
     # remove space after new tag, but allow blank new tag
     origTagLength = newTag.length
     if origTagLength
