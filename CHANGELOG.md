@@ -1,4 +1,9 @@
-## 1.6.0
+## 1.7.0
+_December 19, 2018_
+* Fix jsx syntax when using tree sitter
+* Fix redo for start tag sync
+
+## 1.6.1
 _December 15, 2018_
 * Fix html syntax when using tree sitter
 
