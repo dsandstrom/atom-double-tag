@@ -221,17 +221,17 @@ class DoubleTag
     scopes.some (scope) -> tagScopeRegex.test(scope)
 
   cursorInTreeSitterTag: ->
-    htmlScope = 'entity.name.tag'
+    htmlScope = /entity\.name\.tag/
     scopes = getScopes(@cursor)
     return unless scopes?.length
-    return true if scopes[scopes.length - 1] == htmlScope
+    return true if htmlScope.test(scopes[scopes.length - 1])
 
     leftPosition = [@cursor.getBufferRow(), @cursor.getBufferColumn() - 1]
     scopeDescriptor = @editor.scopeDescriptorForBufferPosition(leftPosition)
     return unless scopeDescriptor
     scopes = scopeDescriptor.getScopesArray()
     return unless scopes?.length
-    scopes[scopes.length - 1] == htmlScope
+    return true if htmlScope.test(scopes[scopes.length - 1])
 
   cursorIsInStartTag: ->
     cursorPosition = @cursor.getBufferPosition()
